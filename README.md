@@ -6,8 +6,7 @@
  - npm install -g yarn
  - yarn add package_name
 
- * 설치/삭제 옵션
-
+ ### 설치/삭제 옵션
  - yarn add to add to Dependencies
  - yarn add --dev to add to devDependencies
  - yarn add --peer to add to peerDependencies
@@ -48,7 +47,6 @@
  - node dist/file_name.js
 
 * 참고 URL
-
 - https://babeljs.io/docs/setup/#installation
 - https://yarnpkg.com/en/docs/managing-dependencies
 - https://code.facebook.com/posts/1840075619545360
