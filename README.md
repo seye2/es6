@@ -23,25 +23,18 @@
 
 4. build 방법
  - package.json 수정
+    tell code
     {
-
         "name": "my-project",
-
         "version": "1.0.0",
-
-        "scripts": {
-
-            "build": "babel src -d dist"
-
+       "scripts": {
+           "build": "babel src -d dist"
         },
-
         "devDependencies": {
-
             "babel-cli": "^6.0.0"
-
         }
-
     }
+    end code
 
  - npm run build
    = ./node_modules/.bin/babel src -d dist
@@ -49,12 +42,11 @@
 5. es2015설치
 
  - .babelrc생성 및 presets설정
-
+    tell code
     {
-
         "presets": ["es2015"]
-
     }
+    end code
 
 6. 실행 방법
  - node dist/file_name.js
