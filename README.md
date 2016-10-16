@@ -88,7 +88,29 @@ stage 0 제안 단계의 언어 명세에 대해서는 semver를 고려하지 �
     }
 ```
  - Template Strings
-    - Template strings는 변수
+    - Template strings는 문자를 변수,클래스,함수로 치환하는걸 허용한다
+
+    ```
+    // Simple string substitution
+    var name = "Brendan";
+    console.log('Yo, ${name}!');
+
+    // =&gt; "Yo, Brendan!"
+    ```
+
+    ```
+    // Simple string substitution
+    var a = 10;
+    var b = 10;
+    console.log('a+b = ${a+b}.');
+    //=&gt; a+b = 20.
+    ```
+
+    ```
+    function fn() { return "I am a result. Rarr"; }
+    console.log('foo ${fn()} bar');
+    //=&gt; foo I am a result. Rarr bar.
+    ```
 
  - Class
     - constructor
