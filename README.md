@@ -8,11 +8,11 @@
 
  * 설치/삭제 옵션
 
- yarn add to add to Dependencies
- yarn add --dev to add to devDependencies
- yarn add --peer to add to peerDependencies
- yarn add --optional to add to optionalDependencies
- yarn remove package_name
+ - yarn add to add to Dependencies
+ - yarn add --dev to add to devDependencies
+ - yarn add --peer to add to peerDependencies
+ - yarn add --optional to add to optionalDependencies
+ - yarn remove package_name
 
 3. babel-cli설치
  - yarn add babel-cli
@@ -49,8 +49,8 @@
 
 * 참고 URL
 
-https://babeljs.io/docs/setup/#installation
-https://yarnpkg.com/en/docs/managing-dependencies
-https://code.facebook.com/posts/1840075619545360
+- https://babeljs.io/docs/setup/#installation
+- https://yarnpkg.com/en/docs/managing-dependencies
+- https://code.facebook.com/posts/1840075619545360
 
 
