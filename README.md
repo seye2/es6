@@ -67,7 +67,7 @@
  - Modules
     - Modules은 다른 파일에 존재하는 value,function,class들을 import하는 것
 
-```
+    ```
     export function exampleFunction() {
       console.log('I\'m an example. #TrueStory');
     }
@@ -86,7 +86,44 @@
         console.log('What should I do? Change the DOM? Print a dancing shark to the console?');
       }
     }
-```
+    ```
+
+ - export
+    - export문은 지정된 파일(또는 모듈)에서 함수 또는 오브젝트, 원시 타입들을 export 하는데 사용됩니다.(내보낼 식별자 이름 (import를 통해 다른 스크립트에서 가져올 수 있습니다.))
+    - named exports
+
+        ```
+        // module "my-module.js"
+        export function cube(x) {
+          return x * x * x;
+        }
+        const foo = Math.PI + Math.SQRT2;
+        export { foo };
+        ```
+
+        ```
+        이 방법으로 우리는 다른 스크립트에서 사용할 수 있습니다
+        import { cube, foo } from 'my-module.js';
+        console.log(cube(3)); // 27
+        console.log(foo);    // 4.555806215962888
+        ```
+
+    - default export 사용하기
+
+        ```
+        // module "my-module.js"
+        let cube = function cube(x) {
+          return x * x * x;
+        }
+        export default cube;
+        ```
+
+        ```
+        // module "my-module.js"
+        import myFunction from 'my-module';
+        console.log(myFunction(3)); // 27
+        ```
+
  - Template Strings
     - Template strings는 문자를 변수,클래스,함수로 치환하는걸 허용한다
 
@@ -113,9 +150,277 @@
     ```
 
  - Class
+    - class란?
+        - Class는 사실 함수이다. 함수를 함수 표현식과 함수 선언으로 정의할 수 있듯이 class 문법도 class 표현식과 class 선언 두가지 방법을 제공한다.
+
+        ```
+        class Polygon {
+          constructor(height, width) {
+            this.height = height;
+            this.width = width;
+          }
+        }
+        ```
+
+        * Hoisting
+            - 함수 선언 과 클래스 선언의 중요한 차이점은 함수 선언의 경우 호이스팅이 일어나지만 클래스 선언은 그렇지 않다는 것이다. 클래스를 사용하기 위해서는 클래스를 먼저 선언 해야 하며 그렇지 않으면 다음과 같은 코드는 ReferenceError를 던질 것이다:
+
+            ```
+            var p = new Polygon(); // ReferenceError
+            class Polygon {}
+            ```
+
+    - Class 표현식
+        - class 표현식은 class를 정의 하는 또 다른 방법이다 . Class 표현식은 이름을 가질 수도 있고 안가질 수도 있다. 이름을 가진 class 표현식의 클래스 이름은 해당 클래스의 body에 대해 local scope에 한해 유효하다.
+
+        ```
+        // unnamed
+        var Polygon = class {
+          constructor(height, width) {
+            this.height = height;
+            this.width = width;
+          }
+        };
+
+        // named
+        var Polygon = class Polygon {
+          constructor(height, width) {
+            this.height = height;
+            this.width = width;
+          }
+        };
+        ```
+
     - constructor
+        - constructor 메소드는 class 로 생성된 객체를 생성하고 초기화하기 위한 특수한 메소드이다.  "constructor" 라는 이름을 가진 특수한 메소드는 클래스 안에 한 개만 존재할 수 있다. 만약 클래스가 한 개를 초과하는 constructor 메소드를 포함하면 SyntaxError 가 발생한다.
+          constructor 는 부모 클래스의 constructor 를 호출하기 위해 super 키워드를 사용할 수 있다.
+
+        ```
+        class Polygon {
+          constructor(height, width) {
+            this.height = height;
+            this.width = width;
+          }
+
+          get area() {
+            return this.calcArea()
+          }
+
+          calcArea() {
+            return this.height * this.width;
+          }
+        }
+        ```
+
     - extends
-    - static
+        - extends 키워드는 클래스 선언이나 클래스 표현식에서 다른 클래스의 자식 클래스를 생성하기 위해 사용된다.
+
+        ```
+        class Animal {
+          constructor(name) {
+            this.name = name;
+          }
+
+          speak() {
+            console.log(this.name + ' makes a noise.');
+          }
+        }
+
+        class Dog extends Animal {
+          speak() {
+            console.log(this.name + ' barks.');
+          }
+        }
+        ```
+
+    - super
+        - super 키워드는 객체의 부모가 가지고 있는 함수들을 호출하기 위해 사용된다.
+
+        ```
+        class Cat {
+          constructor(name) {
+            this.name = name;
+          }
+
+          speak() {
+            console.log(this.name + ' makes a noise.');
+          }
+        }
+
+        class Lion extends Cat {
+          speak() {
+            super.speak();
+            console.log(this.name + ' roars.');
+          }
+        }
+        ```
+
+    - static method
+        - static 키워드는 클래스의 정적(static) 메소드를 정의한다. 정적 메소드는 클래스의 인스턴스화(instantiating) 없이 불리며, 클래스가 인스턴스화 되었다면 부를 수 없다. 정적 메소드는 어플리케이션(application)을 위한 유틸리티(utility) 함수를 생성하는데 주로 사용된다.
+
+        ```
+        class Point {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+
+            static distance(a, b) {
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+
+                return Math.sqrt(dx*dx + dy*dy);
+            }
+        }
+
+        const p1 = new Point(5, 5);
+        const p2 = new Point(10, 10);
+
+        console.log(Point.distance(p1, p2));
+        ```
+
+    - rest parameter
+         - 나머지 매개변수(rest parameter) 구문은 정해지지 않은 수(an indefinite number, 부정수) 인수를 배열로 나타낼 수 있게 합니다.
+         - 나머지 매개변수 및 arguments 객체간 차이
+            - 나머지 매개변수와 arguments 객체 사이에 세 가지 주요 차이점이 있습니다.
+                1. 나머지 매개변수는 개별 이름이 주어지지 않은 유일한 대상이고 arguments 객체는 함수에 전달되는 모든 인수를 포함합니다.
+                2. arguments 객체는 실제 배열이 아니고 나머지 매개변수는 Array 인스턴스로, sort, map, forEach 또는 pop 같은 메서드가 바로 인스턴스에 적용될 수 있음을 뜻합니다
+                3. 즉 arguments 객체는 자체에 특정 추가 기능이 있습니다 (callee 속성처럼)
+
+
+        ```
+        arguments에서 배열까지
+
+        나머지 매개변수는 인수에 의해 유발된 상용구(boilerplate) 코드를 줄이기 위해 도입되었습니다.
+
+        // 나머지 매개변수 이전에는, 다음을 볼 수 있음:
+        function f(a, b){
+          var args = Array.prototype.slice.call(arguments, f.length);
+
+          // …
+        }
+
+        // 위는 아래와 같음
+
+        function f(a, b, ...args) {
+
+        }
+        ```
+
+        ```
+        theArgs가 배열이기에, length 속성을 사용하여 그 요소의 수를 얻을 수 있습니다:
+
+        function fun1(...theArgs) {
+          console.log(theArgs.length);
+        }
+
+        fun1();  // 0
+        fun1(5); // 1
+        fun1(5, 6, 7); // 3
+        ```
+
+        ```
+        function multiply(multiplier, ...theArgs) {
+          return theArgs.map(function (element) {
+            return multiplier * element;
+          });
+        }
+
+        var arr = multiply(2, 1, 2, 3);
+        console.log(arr); // [2, 4, 6]
+        ```
+
+        ```
+        다음 예는 arguments 객체가 아니라 나머지 매개변수에 Array 메서드를 사용할 수 있음을 보입니다:
+
+        function sortRestArgs(...theArgs) {
+          var sortedArgs = theArgs.sort();
+          return sortedArgs;
+        }
+
+        console.log(sortRestArgs(5,3,7,1)); // 1,3,5,7로 보임
+
+        function sortArguments() {
+          var sortedArgs = arguments.sort();
+          return sortedArgs; // 이는 결코 일어나지 않음
+        }
+
+        // TypeError 발생: arguments.sort는 함수가 아님
+        console.log(sortArguments(5,3,7,1));
+        ```
+
+    - arrow function
+        -화살표 함수 식(arrow function expression)은 function 식에 비해 구문이 짧고 (자신의 this, arguments, super 또는 new.target을 바인딩 하지 않는) this 값을 렉시컬(lexically, 정적) 바인딩 합니다. 화살표 함수는 항상 익명입니다.
+
+        ```
+        ES6
+        // empty 화살표 함수는 undefined를 반환
+        let empty = () => {};
+
+        (() => "foobar")() // "foobar" 반환
+
+        var simple = a => a > 15 ? 15 : a;
+        simple(16); // 15
+        simple(10); // 10
+
+        let max = (a, b) => a > b ? a : b;
+
+        // 쉬운 배열 필터링, 매핑, ...
+
+        var arr = [5, 6, 13, 0, 1, 18, 23];
+        var sum = arr.reduce((a, b) => a + b);  // 66
+        var even = arr.filter(v => v % 2 == 0); // [6, 0, 18]
+        var double = arr.map(v => v * 2);       // [10, 12, 26, 0, 2, 36, 46]
+
+        // 더 간결한 프로미스 체인
+        promise.then(a => {
+          // ...
+        }).then(b => {
+           // ...
+        });
+        ```
+
+        ```
+        ES5
+        // empty 화살표 함수는 undefined를 반환
+        var empty = function empty() {};
+
+        (function () {
+          return "foobar";
+        })(); // "foobar" 반환
+
+        var simple = function simple(a) {
+          return a > 15 ? 15 : a;
+        };
+        simple(16); // 15
+        simple(10); // 10
+
+        var max = function max(a, b) {
+          return a > b ? a : b;
+        };
+
+        // 쉬운 배열 필터링, 매핑, ...
+
+        var arr = [5, 6, 13, 0, 1, 18, 23];
+        var sum = arr.reduce(function (a, b) {
+          return a + b;
+        }); // 66
+        var even = arr.filter(function (v) {
+          return v % 2 == 0;
+        }); // [6, 0, 18]
+        var double = arr.map(function (v) {
+          return v * 2;
+        }); // [10, 12, 26, 0, 2, 36, 46]
+
+        // 더 간결한 프로미스 체인
+        promise.then(function (a) {
+          // ...
+        }).then(function (b) {
+          // ...
+        });
+        ```
+
+    -
 
 * 참고 URL
 - https://babeljs.io/docs/setup/#installation
