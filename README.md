@@ -420,7 +420,158 @@
         });
         ```
 
-    -
+    - Promise
+        - Promise 객체는 비동기 계산을 위해 사용됩니다.
+
+        ```
+        new Promise( /* executor */ function(resolve, reject) { ... } );
+        ```
+
+        - 상태
+            대기중(pending): 초기 상태, 이행 또는 거부되지 않은.
+            이행됨(fulfilled): 연산이 성공리에 완료되었음을 뜻합니다.
+            거부됨(rejected): 연산이 실패했음을 뜻합니다.
+
+        https://mdn.mozillademos.org/files/8633/promises.png
+
+        - method
+            - Promise.all
+                반복가능한 변수(배열 등)에 포함된 모든 Promise들이 통과된 경우 결정(resolve)을 하고, 그렇지 못하고 거절(reject)하는 경우 거절하는 첫번째 Promise를 의 거절 원인으로 Promise를 반환합니다.
+                Promise.all w는 배열 내 모든 값이 결정(resolve)할 때까지 기다립니다.
+
+            ```
+            var p1 = Promise.resolve(3);
+            var p2 = 1337;
+            var p3 = new Promise(function(resolve, reject) {
+              setTimeout(resolve, 100, "foo");
+            });
+
+            Promise.all([p1, p2, p3]).then(function(values) {
+              console.log(values); // [3, 1337, "foo"]
+            });
+            ```
+
+            - Promise.race
+                프로미스 중 하나가 결정(resolve) 또는 거부하자마자 결정 또는 거부하는 프로미스를 반환합니다,
+
+            ```
+            var p3 = new Promise(function(resolve, reject) {
+                setTimeout(resolve, 100, "three");
+            });
+            var p4 = new Promise(function(resolve, reject) {
+                setTimeout(reject, 500, "four");
+            });
+
+            Promise.race([p3, p4]).then(function(value) {
+              console.log(value); // "three"
+              // p3이 더 빠르기에 결정함
+            }, function(reason) {
+              // 호출되지 않음
+            });
+            ```
+
+            - Promise.reject
+                 주어진 이유(reason)로 거부된 Promise 객체를 반환합니다.
+
+            ```
+             Promise.reject("Testing static reject").then(function(reason) {
+               // 호출되지 않음
+             }, function(reason) {
+               console.log(reason); // "Testing static reject"
+             });
+
+             Promise.reject(new Error("fail")).then(function(error) {
+               // 호출되지 않음
+             }, function(error) {
+               console.log(error); // Stacktrace
+             });
+            ```
+
+            - Promise.resolve
+                주어진 값으로 결정(resolve)되는 Promise.then 객체를 반환합니다. 그 값이 thenable(즉 "then" 메서드가 있음)인 경우, 반환된 프로미스는 그 thenable을 "따르며", 그 최종 상태를 취합니다; 그렇지 않으면 반환된 프로미스는 그 값으로 이행(fulfill)됩니다.
+
+            ```
+            // thenable이 콜백 전에 오류 던짐
+            // 프로미스 거부
+            var thenable = { then: function(resolve) {
+              throw new TypeError("Throwing");
+              resolve("Resolving");
+            }};
+
+            var p2 = Promise.resolve(thenable);
+            p2.then(function(v) {
+              // 호출되지 않음
+            }, function(e) {
+              console.log(e); // TypeError: Throwing
+            });
+
+            // thenable이 콜백 후에 오류 던짐
+            // 프로미스 결정
+            var thenable = { then: function(resolve) {
+              resolve("Resolving");
+              throw new TypeError("Throwing");
+            }};
+
+            var p3 = Promise.resolve(thenable);
+            p3.then(function(v) {
+              console.log(v); // "Resolving"
+            }, function(e) {
+              // 호출되지 않음
+            });
+            ```
+
+            - Promise.catch
+                Promise 반환하여 거부된 경우만 다룹니다. Promise.prototype.then(undefined, onRejected)를 호출하는 것과 동일하게 행동합니다.
+
+            ```
+            var p1 = new Promise(function(resolve, reject) {
+              resolve('Success');
+            });
+
+            p1.then(function(value) {
+              console.log(value); // "Success!"
+              throw 'oh, no!';
+            }).catch(function(e) {
+              console.log(e); // "oh, no!"
+            }).then(function(){
+              console.log('after a catch the chain is restored');
+            }, function () {
+              console.log('Not fired due to the catch');
+            });
+
+            // 다음은 위와 동일하게 행동
+            p1.then(function(value) {
+              console.log(value); // "Success!"
+              return Promise.reject('oh, no!');
+            }).catch(function(e) {
+              console.log(e); // "oh, no!"
+            }).then(function(){
+              console.log('after a catch the chain is restored');
+            }, function () {
+              console.log('Not fired due to the catch');
+            });
+            ```
+
+            - Promise.then
+                Promise를 리턴하고 두개의 콜백 함수를 인수로 받습니다. 하나는 Promise가 성공(success)했을 때를 위한 콜백 함수이고, 다른 하나는 실패(failure)했을 때를 위한 콜백 함수입니다.
+
+            ```
+            var p2 = new Promise(function(resolve, reject) {
+              resolve(1);
+            });
+
+            p2.then(function(value) {
+              console.log(value); // 1
+              return value + 1;
+            }).then(function(value) {
+              console.log(value); // 2
+            });
+
+            p2.then(function(value) {
+              console.log(value); // 1
+            });
+            ```
+            
 
 * 참고 URL
 - https://babeljs.io/docs/setup/#installation
