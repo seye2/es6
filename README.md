@@ -432,7 +432,7 @@
             이행됨(fulfilled): 연산이 성공리에 완료되었음을 뜻합니다.
             거부됨(rejected): 연산이 실패했음을 뜻합니다.
 
-        https://mdn.mozillademos.org/files/8633/promises.png
+        <img src="https://mdn.mozillademos.org/files/8633/promises.png" />
 
         - method
             - Promise.all
@@ -571,7 +571,7 @@
               console.log(value); // 1
             });
             ```
-            
+
 
 * 참고 URL
 - https://babeljs.io/docs/setup/#installation
