@@ -572,6 +572,98 @@
             });
             ```
 
+    - Object.assign (객체 복사 = 깊은 복사)
+        소스 프로퍼티와 동일한 프로퍼티의 키를 가진 타켓 오브젝트의 프로퍼티들은 소스 오브젝트의 프로퍼티로 덮어쓰기 될 것입니다.
+
+        ```
+        Object.assign(target, ...sources)
+
+        target
+            타켓 오브젝트
+        sources
+            하나 이상의 소스 오브젝트
+
+        리턴값
+            타겟 오브젝트
+        ```
+
+        - 같은 프로퍼티를 가지는 객체 병합
+
+        ```
+        var o1 = { a: 1, b: 1, c: 1 };
+        var o2 = { b: 2, c: 2 };
+        var o3 = { c: 3 };
+
+        var obj = Object.assign({}, o1, o2, o3);
+        console.log(obj); // { a: 1, b: 2, c: 3 }
+        ```
+
+        - Copying Accessors
+
+        ```
+        var obj = {
+          foo: 1,
+          get bar() {
+            return 2;
+          }
+        };
+
+        var copy = Object.assign({}, obj);
+        console.log(copy);
+        // { foo: 1, bar: 2 }, the value of copy.bar is obj.bar's getter's return value.
+
+        // This is an assign function that copies full descriptors
+        function completeAssign(target, ...sources) {
+          sources.forEach(source => {
+            let descriptors = Object.keys(source).reduce((descriptors, key) => {
+              descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
+              return descriptors;
+            }, {});
+            // by default, Object.assign copies enumerable Symbols too
+            Object.getOwnPropertySymbols(source).forEach(sym => {
+              let descriptor = Object.getOwnPropertyDescriptor(source, sym);
+              if (descriptor.enumerable) {
+                descriptors[sym] = descriptor;
+              }
+            });
+            Object.defineProperties(target, descriptors);
+          });
+          return target;
+        }
+
+        var copy = completeAssign({}, obj);
+        console.log(copy);
+        // { foo:1, get bar() { return 2 } }
+        ```
+
+        - Polyfill
+        ```
+        if (typeof Object.assign != 'function') {
+          (function () {
+            Object.assign = function (target) {
+              'use strict';
+              // We must check against these specific cases.
+              if (target === undefined || target === null) {
+                throw new TypeError('Cannot convert undefined or null to object');
+              }
+
+              var output = Object(target);
+              for (var index = 1; index < arguments.length; index++) {
+                var source = arguments[index];
+                if (source !== undefined && source !== null) {
+                  for (var nextKey in source) {
+                    if (source.hasOwnProperty(nextKey)) {
+                      output[nextKey] = source[nextKey];
+                    }
+                  }
+                }
+              }
+              return output;
+            };
+          })();
+        }
+        ```
+
 
 * 참고 URL
 - https://babeljs.io/docs/setup/#installation
@@ -579,4 +671,5 @@
 - https://code.facebook.com/posts/1840075619545360
 - http://webframeworks.kr/tutorials/react/es2015-react/#tocAnchor-1-2
 - https://developers.google.com/web/shows/ttt/series-2/es2015
+
 
