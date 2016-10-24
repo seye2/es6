@@ -664,7 +664,9 @@
         }
         ```
 
-
+       sync/await
+       
+       
 * 참고 URL
 - https://babeljs.io/docs/setup/#installation
 - https://yarnpkg.com/en/docs/managing-dependencies
