@@ -64,6 +64,20 @@
     구현체 별 언어 명세 지원 테이블은 http://kangax.github.io/compat-table/es6/를 참고하도록 합시다.
 
 8. es6 문법
+ - Object Destructuring
+ 
+ 
+ - Object Assign = Mergin Values into a Combined Variable
+ 
+ 우리는 assign 메소드를 통해 default 객체와 option 객체를 merge 하여 최종 setting 객체를 만든다.
+ 
+ 이 때, option의 요소들과 default의 요소들을 비교하여 같은 프로퍼티일 경우에는 option 객체의 것이 default 객체의 것을 오버라이드한다. 
+ 
+ 즉, default로 setting되어 있는 값보다 인자로 넘어오는 값을 우선적으로 할당한다는 것이다.
+ 
+ 
+ 
+ 
  - Modules
     - Modules은 다른 파일에 존재하는 value,function,class들을 import하는 것
 
