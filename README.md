@@ -712,7 +712,30 @@
         }
         ```
 
-       sync/await
+       - sync/await
+       
+          사실 `async await`는 곧 나올 ES2016의 기능이지만, 제너레이터와 Promise를 같이써야 할 수 있었던 것들을 더 적은 노력으로 가능하게 합니다.
+
+          ```javascript
+          var request = require('request');
+
+          function getJSON(url) {
+            return new Promise(function(resolve, reject) {
+              request(url, function(error, response, body) {
+                resolve(body);
+              });
+            });
+          }
+
+          async function main() {
+            var data = await getJSON();
+            console.log(data); // undefined 값이 아님!
+          }
+
+          main();
+          ```
+          
+       (http://masnun.com/2015/11/11/using-es7-asyncawait-today-with-babel.html)에서 ES7과 Babel을 통해 실행할 수 있는 좋은 예제를 얻을 수 있습니다.
        
        
 * 참고 URL
