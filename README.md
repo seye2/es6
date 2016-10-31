@@ -65,8 +65,44 @@
 
 8. es6 문법
  - Object Destructuring
- 
- 
+   ## Destructuring
+
+      Destructuring은 배열 혹은 객체(깊게 중첩된 것도 포함하여)에서 편리한 문법을 이용해 값을 추출하고 저장하는데에 활용됩니다.
+
+      ### 배열 Destructuring
+
+      ```javascript
+      var arr = [1, 2, 3, 4];
+      var a = arr[0];
+      var b = arr[1];
+      var c = arr[2];
+      var d = arr[3];
+      ```
+
+      ```javascript
+      let [a, b, c, d] = [1, 2, 3, 4];
+
+      console.log(a); // 1
+      console.log(b); // 2
+      ```
+
+      ### 객체 Destructuring
+
+      ```javascript
+      var luke = { occupation: 'jedi', father: 'anakin' };
+      var occupation = luke.occupation; // 'jedi'
+      var father = luke.father; // 'anakin'
+      ```
+
+      ```javascript
+      let luke = { occupation: 'jedi', father: 'anakin' };
+      let {occupation, father} = luke;
+
+      console.log(occupation); // 'jedi'
+      console.log(father); // 'anakin'
+      
+      ```
+
  - Object Assign = Mergin Values into a Combined Variable
  
    우리는 assign 메소드를 통해 default 객체와 option 객체를 merge 하여 최종 setting 객체를 만든다.
